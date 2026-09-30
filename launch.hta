@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Project New Horizon - Launcher</title>
+<HTA:APPLICATION
+  ID="NewHorizonLauncher"
+  APPLICATIONNAME="Project New Horizon Launcher"
+  SINGLEINSTANCE="yes"
+  BORDER="thin"
+  CAPTION="yes"
+  SCROLL="no"
+  WINDOWSTATE="normal"
+/>
+<style>
+  body { font-family: "Segoe UI", Arial, sans-serif; background: #121318; color: #E8EAF0; margin: 0; padding: 20px; }
+  h1 { font-size: 20px; margin: 0 0 6px 0; }
+  p { font-size: 13px; color: #9CA3AF; margin: 0 0 16px 0; }
+  button { display: block; width: 100%; margin: 8px 0; padding: 12px; font-size: 14px;
+           background: #1A1C23; color: #10B981; border: 1px solid #232533; border-radius: 8px; cursor: pointer; }
+  button:hover { background: #232533; }
+  .note { font-size: 11px; color: #6b7280; margin-top: 12px; }
+</style>
+<script language="VBScript">
+  Dim oShell
+  Set oShell = CreateObject("WScript.Shell")
+
+  Function ProjectFolder()
+    Dim sPath
+    sPath = Replace(Document.location.pathname, "/", "\")
+    If Left(sPath, 1) = "\" Then sPath = Mid(sPath, 2)
+    sPath = UnEscape(sPath)
+    ProjectFolder = CreateObject("Scripting.FileSystemObject").GetParentFolderName(sPath)
+  End Function
+
+  Function Q(s)
+    Q = Chr(34) & s & Chr(34)
+  End Function
+
+  Sub OpenMain()
+    oShell.Run Q(ProjectFolder() & "\main.py"), 1, False
+  End Sub
+
+  Sub StartServer()
+    oShell.Run "cmd /k cd /d " & Q(ProjectFolder()) & " && python main.py", 1, False
+  End Sub
+
+  Sub InstallDeps()
+    oShell.Run "cmd /k cd /d " & Q(ProjectFolder()) & " && pip install -r requirements.txt", 1, False
+  End Sub
+
+  Sub OpenFolder()
+    oShell.Run Q(ProjectFolder()), 1, False
+  End Sub
+</script>
+</head>
+<body>
+  <h1>Project New Horizon</h1>
+  <p>Desktop voice assistant overlay (CustomTkinter). Entry file: main.py. Needs API keys in .env (see .env.example).</p>
+  <button onclick="StartServer">1. Run App (python main.py)</button>
+  <button onclick="OpenMain">2. Open Main File (main.py)</button>
+  <button onclick="InstallDeps">3. Install Dependencies (pip install)</button>
+  <button onclick="OpenFolder">4. Open Project Folder</button>
+  <div class="note">No server needed - it is a desktop app. Copy .env.example to .env and add your Groq keys first.</div>
+</body>
+</html>

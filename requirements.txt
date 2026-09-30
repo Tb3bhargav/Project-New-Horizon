@@ -1,0 +1,10 @@
+# Project New Horizon — runtime dependencies
+# Install with:  pip install -r requirements.txt
+customtkinter>=5.2
+numpy>=1.26
+sounddevice>=0.4.6
+groq>=0.9
+# Optional: only needed for Silero VAD neural detection.
+# The app falls back to energy-based VAD if these are absent.
+# torch>=2.0
+# silero-vad>=5.0
